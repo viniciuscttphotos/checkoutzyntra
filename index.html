@@ -1,315 +1,219 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZYNTRA | Premium Store</title>
+    <title>ZYNTRA | Performance System</title>
+    <!-- Tailwind CSS para Estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        :root { --navy: #001F3F; --gold: #D4AF37; --ice: #FBFBFE; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--ice); color: #1D1D1F; }
-        
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
-        
-        .product-card {
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FBFBFE;
+            color: #1D1D1F;
+        }
+
+        .gold-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #C5A028 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .premium-card {
             background: white;
-            border-radius: 24px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-            border-color: var(--gold);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        #cart-drawer {
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .premium-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.06);
+            border-color: #D4AF37;
         }
-        .drawer-open { transform: translateX(0) !important; }
 
-        /* Scrollbar customisada */
+        .btn-navy {
+            background-color: #001F3F;
+            transition: all 0.3s ease;
+        }
+
+        .btn-navy:hover {
+            background-color: #001122;
+            box-shadow: 0 10px 20px rgba(0, 31, 63, 0.2);
+            transform: scale(1.02);
+        }
+
+        /* Animação de entrada suave */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+
+        /* Esconder scrollbar mas manter funcionalidade */
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        .active-filter {
-            background-color: var(--navy) !important;
-            color: white !important;
-        }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="antialiased overflow-x-hidden">
+<body class="antialiased">
 
-    <!-- ANNOUNCEMENT BAR -->
-    <div class="bg-[#001F3F] text-white text-[10px] py-2 text-center font-bold tracking-[0.2em] uppercase">
-        Logística Privada • Envio em Embalagem Neutra • Suporte VIP
-    </div>
-
-    <!-- STICKY HEADER -->
-    <nav class="glass sticky top-0 w-full z-50 border-b border-gray-100 px-6 py-4">
+    <!-- Navegação -->
+    <nav class="glass-nav fixed top-0 w-full z-50 border-b border-gray-100 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
-                <div class="w-8 h-8 bg-[#001F3F] rounded-lg flex items-center justify-center">
-                    <i data-lucide="component" class="w-5 h-5 text-[#D4AF37]"></i>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#001F3F] rounded-full flex items-center justify-center shadow-lg">
+                    <div class="w-3 h-3 border-2 border-[#D4AF37] rotate-45"></div>
                 </div>
-                <span class="font-bold tracking-tighter text-2xl text-[#001F3F]">ZYNTRA</span>
+                <span class="font-bold tracking-[0.2em] text-xl text-[#001F3F]">ZYNTRA</span>
             </div>
 
-            <div class="hidden md:flex gap-8 text-[11px] font-bold uppercase tracking-widest text-gray-400">
-                <button onclick="scrollToShop()" class="hover:text-[#D4AF37] transition">Compostos</button>
-                <button class="hover:text-[#D4AF37] transition">Protocolos</button>
-                <button class="hover:text-[#D4AF37] transition">Segurança</button>
+            <div class="hidden md:flex gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Protocolos</a>
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Segurança</a>
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Suporte</a>
             </div>
 
-            <div class="flex items-center gap-4">
-                <button onclick="toggleCart()" class="relative flex items-center gap-2 bg-[#001F3F] text-white px-5 py-2.5 rounded-full hover:bg-black transition-all shadow-lg active:scale-95">
-                    <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                    <span id="cart-count" class="text-xs font-bold bg-[#D4AF37] text-[#001F3F] min-w-[1.25rem] h-5 px-1 rounded-full flex items-center justify-center ml-1">0</span>
+            <div class="flex items-center gap-5">
+                <div class="hidden sm:block text-right">
+                    <p class="text-[9px] text-gray-400 uppercase font-bold tracking-tighter">Subtotal</p>
+                    <p class="text-sm font-bold text-[#001F3F]">R$ 1.850,00</p>
+                </div>
+                <button class="relative bg-[#001F3F] p-2.5 rounded-full text-white">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-[#D4AF37] border-2 border-white rounded-full text-[9px] flex items-center justify-center font-bold text-[#001F3F]">2</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- HERO -->
-    <section class="bg-white pt-20 pb-24 px-6">
-        <div class="max-w-7xl mx-auto text-center">
-            <h1 class="text-6xl md:text-8xl font-bold text-[#001F3F] tracking-tighter leading-none mb-8">
-                Bio-Performance <br> <span class="italic font-serif text-[#D4AF37]">Premium.</span>
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+        
+        <!-- Hero Section -->
+        <header class="mb-20 animate-fade-in">
+            <h2 class="text-[#D4AF37] font-bold tracking-[0.4em] text-[10px] mb-4 uppercase">Bio-Performance Private System</h2>
+            <h1 class="text-5xl md:text-7xl font-light tracking-tight text-[#001F3F] leading-[1.1] mb-8">
+                Protocolos de elite para <br>
+                <span class="italic font-serif gold-gradient font-semibold">performance humana.</span>
             </h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-                Acesse a vanguarda da performance humana. Compostos de pureza farmacêutica com logística privada e discreta.
-            </p>
+
+            <div class="relative max-w-2xl group">
+                <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#D4AF37] transition-colors w-5 h-5"></i>
+                <input type="text" placeholder="Buscar composto ou objetivo (ex: Recovery)..." 
+                class="w-full bg-white border border-gray-100 py-6 pl-14 pr-6 rounded-[24px] shadow-sm focus:outline-none focus:ring-4 focus:ring-[#D4AF37]/5 focus:border-[#D4AF37]/30 transition-all text-lg font-light">
+            </div>
+        </header>
+
+        <!-- Grid de Produtos -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            <!-- SEARCH BAR -->
-            <div class="relative max-w-xl mx-auto">
-                <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5"></i>
-                <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Buscar composto ou objetivo..." 
-                class="w-full bg-gray-50 border border-gray-100 py-5 pl-14 pr-6 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-all shadow-sm">
+            <!-- Produto 1 -->
+            <div class="premium-card rounded-[40px] p-8 flex flex-col justify-between animate-fade-in delay-1">
+                <div>
+                    <div class="flex justify-between items-start mb-10">
+                        <span class="bg-[#D4AF37]/10 text-[#C5A028] text-[9px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">Performance</span>
+                        <i data-lucide="info" class="w-5 h-5 text-gray-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#001F3F] mb-2 tracking-tight">CJC-1295 + Ipamorelin</h3>
+                    <p class="text-gray-400 text-sm font-light mb-8">Estímulo avançado de GH e recuperação tecidual.</p>
+                    
+                    <div class="w-full h-40 bg-gray-50 rounded-3xl mb-8 flex items-center justify-center group-hover:bg-white transition-colors">
+                        <i data-lucide="microscope" class="w-12 h-12 text-[#D4AF37] opacity-40"></i>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-6 border-t border-gray-50">
+                    <div>
+                        <span class="text-[9px] text-gray-400 block uppercase font-bold tracking-widest mb-1">Investimento</span>
+                        <span class="text-xl font-bold text-[#001F3F]">R$ 550,00</span>
+                    </div>
+                    <button class="btn-navy p-4 rounded-2xl text-white">
+                        <i data-lucide="plus" class="w-6 h-6"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </section>
 
-    <!-- SHOPPING AREA -->
-    <main id="shop" class="max-w-7xl mx-auto px-6 py-20">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
-            <div class="flex gap-2 overflow-x-auto no-scrollbar w-full md:w-auto">
-                <button onclick="filterBy('all')" id="filter-all" class="filter-btn active-filter px-6 py-2.5 rounded-xl border border-gray-100 text-[10px] font-bold uppercase tracking-widest transition-all">Todos</button>
-                <button onclick="filterBy('performance')" id="filter-performance" class="filter-btn bg-white px-6 py-2.5 rounded-xl border border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:border-[#D4AF37] transition-all">Performance</button>
-                <button onclick="filterBy('recovery')" id="filter-recovery" class="filter-btn bg-white px-6 py-2.5 rounded-xl border border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:border-[#D4AF37] transition-all">Recuperação</button>
+            <!-- Produto 2 -->
+            <div class="premium-card rounded-[40px] p-8 flex flex-col justify-between animate-fade-in delay-2">
+                <div>
+                    <div class="flex justify-between items-start mb-10">
+                        <span class="bg-[#D4AF37]/10 text-[#C5A028] text-[9px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">Longevidade</span>
+                        <i data-lucide="info" class="w-5 h-5 text-gray-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#001F3F] mb-2 tracking-tight">Cardiogen</h3>
+                    <p class="text-gray-400 text-sm font-light mb-8">Bio-regulador peptídico para saúde cardiovascular.</p>
+                    
+                    <div class="w-full h-40 bg-gray-50 rounded-3xl mb-8 flex items-center justify-center">
+                        <i data-lucide="activity" class="w-12 h-12 text-[#D4AF37] opacity-40"></i>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-6 border-t border-gray-50">
+                    <div>
+                        <span class="text-[9px] text-gray-400 block uppercase font-bold tracking-widest mb-1">Investimento</span>
+                        <span class="text-xl font-bold text-[#001F3F]">R$ 480,00</span>
+                    </div>
+                    <button class="btn-navy p-4 rounded-2xl text-white">
+                        <i data-lucide="plus" class="w-6 h-6"></i>
+                    </button>
+                </div>
             </div>
-            <p class="text-[10px] font-bold text-gray-300 uppercase tracking-widest" id="product-results-count">Exibindo todos os compostos</p>
-        </div>
 
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Renderizado via Javascript -->
-        </div>
+            <!-- Produto CTA (Diferencial) -->
+            <div class="bg-[#001F3F] rounded-[40px] p-10 flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden animate-fade-in delay-2">
+                <div class="w-16 h-16 bg-[#D4AF37] rounded-2xl mb-6 flex items-center justify-center rotate-12 shadow-xl">
+                    <i data-lucide="shield-check" class="w-8 h-8 text-[#001F3F] -rotate-12"></i>
+                </div>
+                <h3 class="text-white text-xl font-bold mb-3">Protocolo via IA</h3>
+                <p class="text-blue-100/60 text-sm font-light mb-8 italic">Análise molecular personalizada baseada nos seus exames e objetivos.</p>
+                <button class="w-full py-4 bg-white text-[#001F3F] rounded-2xl font-bold hover:bg-[#D4AF37] hover:text-white transition-all uppercase tracking-widest text-xs">
+                    Iniciar Análise
+                </button>
+            </div>
+
+        </section>
     </main>
 
-    <!-- CART DRAWER -->
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
-    
-    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl translate-x-full flex flex-col">
-        <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-white sticky top-0">
-            <h3 class="font-bold text-[#001F3F] uppercase tracking-widest text-sm flex items-center gap-2">
-                <i data-lucide="shopping-bag" class="w-4 h-4 text-[#D4AF37]"></i> Meu Carrinho
-            </h3>
-            <button onclick="toggleCart()" class="p-2 hover:bg-gray-50 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-
-        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
-            <!-- Itens do carrinho -->
-        </div>
-
-        <div class="p-8 bg-gray-50 border-t border-gray-100">
-            <div class="flex justify-between items-end mb-6">
-                <div>
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Total Estimado</p>
-                    <p id="cart-total" class="text-3xl font-bold text-[#001F3F]">R$ 0,00</p>
-                </div>
-                <i data-lucide="shield-check" class="text-[#D4AF37] w-6 h-6 mb-1"></i>
+    <!-- Botão de Ação Flutuante -->
+    <div class="fixed bottom-10 left-0 w-full flex justify-center px-6 pointer-events-none">
+        <button class="pointer-events-auto bg-[#001F3F] text-white px-10 py-5 rounded-full shadow-2xl flex items-center gap-4 hover:scale-105 transition-transform group">
+            <span class="font-bold tracking-[0.2em] text-[10px] uppercase">Gerar Pedido Seguro</span>
+            <div class="w-6 h-6 bg-[#D4AF37] rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-[#001F3F]"></i>
             </div>
-            <button onclick="sendOrder()" class="w-full bg-[#001F3F] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-black transition-all shadow-xl active:scale-95">
-                Finalizar via WhatsApp Prioritário
-            </button>
-        </div>
+        </button>
     </div>
 
+    <!-- Scripts de Ícones -->
     <script>
-        // ESTADO GLOBAL DO APP
-        const State = {
-            products: [
-                { id: 1, name: 'CJC-1295 + Ipamorelin', dose: 'Protocolo 10mg', price: 520, cat: 'performance', icon: 'zap' },
-                { id: 2, name: 'BPC-157 Elite', dose: 'Vial 5mg', price: 390, cat: 'recovery', icon: 'shield-plus' },
-                { id: 3, name: 'Cardarine GW-501516', dose: '60 caps / 20mg', price: 380, cat: 'performance', icon: 'activity' },
-                { id: 4, name: 'Epithalon', dose: 'Vial 10mg', price: 560, cat: 'recovery', icon: 'hourglass' },
-                { id: 5, name: 'TB-500 Pro', dose: 'Vial 5mg', price: 450, cat: 'recovery', icon: 'replicate' },
-                { id: 6, name: 'MK-677 Ibutamoren', dose: '30 caps / 25mg', price: 410, cat: 'performance', icon: 'target' },
-                { id: 7, name: 'Tesamorelin', dose: 'Vial 10mg', price: 680, cat: 'performance', icon: 'flame' },
-                { id: 8, name: 'Melanotan II', dose: 'Vial 10mg', price: 320, cat: 'performance', icon: 'sun' }
-            ],
-            cart: [],
-            currentFilter: 'all',
-            searchQuery: ''
-        };
-
-        // RENDERIZAÇÃO DA GRADE DE PRODUTOS
-        function renderProducts() {
-            const grid = document.getElementById('product-grid');
-            const filtered = State.products.filter(p => {
-                const matchesFilter = State.currentFilter === 'all' || p.cat === State.currentFilter;
-                const matchesSearch = p.name.toLowerCase().includes(State.searchQuery.toLowerCase());
-                return matchesFilter && matchesSearch;
-            });
-
-            grid.innerHTML = filtered.map(p => `
-                <div class="product-card p-6 flex flex-col justify-between min-h-[360px]">
-                    <div>
-                        <div class="flex justify-between items-start mb-6">
-                            <span class="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] bg-[#D4AF37]/5 px-3 py-1 rounded-full">${p.cat}</span>
-                            <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-[#001F3F]/20">
-                                <i data-lucide="${p.icon}"></i>
-                            </div>
-                        </div>
-                        <h3 class="font-bold text-[#001F3F] text-lg leading-tight mb-2">${p.name}</h3>
-                        <p class="text-xs text-gray-400 font-medium mb-4">${p.dose}</p>
-                    </div>
-                    <div class="pt-6 border-t border-gray-50 flex justify-between items-center">
-                        <div>
-                            <p class="text-[10px] text-gray-300 font-bold uppercase">Investimento</p>
-                            <p class="text-lg font-bold text-[#001F3F]">R$ ${p.price},00</p>
-                        </div>
-                        <button onclick="addToCart(${p.id})" class="bg-[#001F3F] text-white p-3.5 rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-md shadow-navy/10">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            document.getElementById('product-results-count').innerText = `Encontrados: ${filtered.length} compostos`;
-            lucide.createIcons(); // Vital para os ícones aparecerem após re-renderizar
-        }
-
-        // LÓGICA DO CARRINHO
-        function addToCart(id) {
-            const product = State.products.find(p => p.id === id);
-            const existing = State.cart.find(item => item.id === id);
-
-            if (existing) {
-                existing.qty += 1;
+        lucide.createIcons();
+        
+        // Efeito de scroll no header
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('py-3', 'shadow-sm');
+                nav.classList.remove('py-4');
             } else {
-                State.cart.push({ ...product, qty: 1 });
+                nav.classList.add('py-4');
+                nav.classList.remove('py-3', 'shadow-sm');
             }
-            
-            updateCartUI();
-            openCart();
-        }
-
-        function changeQty(id, delta) {
-            const item = State.cart.find(i => i.id === id);
-            if (item) {
-                item.qty += delta;
-                if (item.qty <= 0) {
-                    State.cart = State.cart.filter(i => i.id !== id);
-                }
-                updateCartUI();
-            }
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cart-items');
-            const totalEl = document.getElementById('cart-total');
-            const countEl = document.getElementById('cart-count');
-
-            if (State.cart.length === 0) {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center py-20 text-gray-300">
-                        <i data-lucide="package-open" class="w-12 h-12 mb-4 opacity-20"></i>
-                        <p class="text-xs font-bold uppercase tracking-widest">Protocolo Vazio</p>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = State.cart.map(item => `
-                    <div class="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                        <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-[#D4AF37]">
-                            <i data-lucide="${item.icon}" class="w-5 h-5"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="text-xs font-bold text-[#001F3F] leading-tight">${item.name}</h4>
-                            <p class="text-[10px] text-[#D4AF37] font-bold mt-1">R$ ${item.price},00</p>
-                        </div>
-                        <div class="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-xl">
-                            <button onclick="changeQty(${item.id}, -1)" class="text-gray-400 hover:text-red-500 transition"><i data-lucide="minus" class="w-3 h-3"></i></button>
-                            <span class="text-xs font-bold text-[#001F3F] min-w-[12px] text-center">${item.qty}</span>
-                            <button onclick="changeQty(${item.id}, 1)" class="text-gray-400 hover:text-navy transition"><i data-lucide="plus" class="w-3 h-3"></i></button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            const total = State.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            totalEl.innerText = `R$ ${total.toLocaleString()},00`;
-            countEl.innerText = State.cart.reduce((sum, item) => sum + item.qty, 0);
-            
-            lucide.createIcons();
-        }
-
-        // CONTROLES DE UI
-        function toggleCart() {
-            const drawer = document.getElementById('cart-drawer');
-            const overlay = document.getElementById('cart-overlay');
-            const isOpen = drawer.classList.contains('drawer-open');
-
-            if (isOpen) {
-                drawer.classList.remove('drawer-open');
-                overlay.classList.add('hidden');
-                overlay.style.opacity = "0";
-            } else {
-                drawer.classList.add('drawer-open');
-                overlay.classList.remove('hidden');
-                setTimeout(() => overlay.style.opacity = "1", 10);
-            }
-        }
-
-        function openCart() {
-            const drawer = document.getElementById('cart-drawer');
-            const overlay = document.getElementById('cart-overlay');
-            drawer.classList.add('drawer-open');
-            overlay.classList.remove('hidden');
-            overlay.style.opacity = "1";
-        }
-
-        function filterBy(cat) {
-            State.currentFilter = cat;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter', 'bg-[#001F3F]', 'text-white'));
-            document.getElementById(`filter-${cat}`).classList.add('active-filter');
-            renderProducts();
-        }
-
-        function handleSearch(val) {
-            State.searchQuery = val;
-            renderProducts();
-        }
-
-        function scrollToShop() {
-            document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function sendOrder() {
-            if (State.cart.length === 0) return alert("Seu protocolo está vazio.");
-            
-            const total = State.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const itemsList = State.cart.map(i => `• ${i.name} (x${i.qty})`).join('%0A');
-            const message = `Olá, gostaria de solicitar meu protocolo Zyntra:%0A%0A${itemsList}%0A%0ATotal: R$ ${total.toLocaleString()},00%0A%0A*Solicito atendimento para envio prioritário.*`;
-            
-            window.open(`https://wa.me/5511999999999?text=${message}`, '_blank');
-        }
-
-        // INICIALIZAÇÃO
-        window.onload = () => {
-            renderProducts();
-            updateCartUI();
-        };
+        });
     </script>
 </body>
 </html>
