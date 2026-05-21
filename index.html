@@ -758,5 +758,428 @@
 
   </div>
 
+  <!-- ========================= -->
+  <!-- TELA: ENTRAR NO SISTEMA -->
+  <!-- ========================= -->
+
+  <section class="system-screen">
+
+    <div class="system-bg-glow"></div>
+
+    <div class="system-container">
+
+      <div class="system-left">
+
+        <img src="/assets/zyntralogo1.png" alt="Zyntra Logo" class="system-logo">
+
+        <div class="system-badge">
+          ACESSO PRIVADO • ZYNTRA PERFORMANCE
+        </div>
+
+        <h2>
+          Bem-vindo ao ecossistema premium da Zyntra.
+        </h2>
+
+        <p>
+          Uma infraestrutura privada desenvolvida para seleção de protocolos,
+          stacks avançados e acompanhamento seguro de pedidos.
+        </p>
+
+        <div class="system-info-grid">
+
+          <div class="system-info-card">
+            <div class="system-info-icon">01</div>
+            <div>
+              <strong>Protocolos Inteligentes</strong>
+              <span>Stacks avançados organizados por objetivo e performance.</span>
+            </div>
+          </div>
+
+          <div class="system-info-card">
+            <div class="system-info-icon">02</div>
+            <div>
+              <strong>Ambiente Seguro</strong>
+              <span>Experiência privada com rastreio e atendimento dedicado.</span>
+            </div>
+          </div>
+
+          <div class="system-info-card">
+            <div class="system-info-icon">03</div>
+            <div>
+              <strong>Fluxo Premium</strong>
+              <span>Pedidos simplificados com experiência refinada.</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="system-right">
+
+        <div class="login-panel">
+
+          <div class="login-top">
+            <span class="login-kicker">ACESSO AO SISTEMA</span>
+            <h3>Entrar no Sistema</h3>
+            <p>
+              Acesse sua área privada e continue seu protocolo.
+            </p>
+          </div>
+
+          <form class="login-form">
+
+            <div class="login-input-group">
+              <label>Email</label>
+              <input type="email" placeholder="seuemail@exemplo.com">
+            </div>
+
+            <div class="login-input-group">
+              <label>Senha</label>
+              <input type="password" placeholder="••••••••••••">
+            </div>
+
+            <div class="login-row">
+              <label>
+                <input type="checkbox">
+                Manter conectado
+              </label>
+
+              <a href="#">Recuperar acesso</a>
+            </div>
+
+            <button class="login-btn">
+              Acessar Plataforma
+            </button>
+
+          </form>
+
+          <div class="login-divider">
+            <span>ou</span>
+          </div>
+
+          <button class="secondary-login-btn">
+            Solicitar novo acesso
+          </button>
+
+          <div class="login-security">
+            🔒 Ambiente protegido e monitorado.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <style>
+
+    .system-screen {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(13,94,255,0.08), transparent 25%),
+        radial-gradient(circle at bottom left, rgba(212,175,55,0.10), transparent 30%),
+        linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+    }
+
+    .system-bg-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(13,94,255,0.12), transparent 70%);
+      top: -250px;
+      right: -180px;
+      pointer-events: none;
+    }
+
+    .system-container {
+      width: min(1400px, 100%);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      border-radius: 38px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(13,94,255,0.08);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 100px rgba(13,94,255,0.10);
+      position: relative;
+      z-index: 2;
+    }
+
+    .system-left {
+      padding: 5rem;
+      position: relative;
+    }
+
+    .system-logo {
+      height: 65px;
+      margin-bottom: 2rem;
+    }
+
+    .system-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      background: rgba(13,94,255,0.06);
+      border: 1px solid rgba(13,94,255,0.10);
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .system-left h2 {
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 0.95;
+      margin-bottom: 1.5rem;
+      max-width: 650px;
+    }
+
+    .system-left p {
+      color: var(--text-secondary);
+      line-height: 1.9;
+      max-width: 580px;
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+    }
+
+    .system-info-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .system-info-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(13,94,255,0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .system-info-icon {
+      min-width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: var(--glow);
+    }
+
+    .system-info-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .system-info-card span {
+      color: var(--text-secondary);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .system-right {
+      background: rgba(255,255,255,0.55);
+      border-left: 1px solid rgba(13,94,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+    }
+
+    .login-panel {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(13,94,255,0.08);
+      border-radius: 32px;
+      padding: 2.5rem;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 50px rgba(15,23,42,0.06);
+    }
+
+    .login-kicker {
+      color: var(--accent);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .login-top h3 {
+      font-size: 2.4rem;
+      margin: 1rem 0;
+    }
+
+    .login-top p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .login-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .login-input-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .login-input-group input {
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      border: 1px solid rgba(13,94,255,0.08);
+      background: rgba(255,255,255,0.92);
+      outline: none;
+      transition: 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .login-input-group input:focus {
+      border-color: rgba(13,94,255,0.28);
+      box-shadow: 0 0 0 5px rgba(13,94,255,0.06);
+    }
+
+    .login-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: -4px;
+    }
+
+    .login-row a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-btn {
+      margin-top: 1rem;
+      border: none;
+      padding: 1.1rem;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: var(--glow);
+    }
+
+    .login-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .login-divider {
+      position: relative;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .login-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(13,94,255,0.08);
+    }
+
+    .login-divider span {
+      position: relative;
+      padding: 0 1rem;
+      background: white;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .secondary-login-btn {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 18px;
+      border: 1px solid rgba(13,94,255,0.08);
+      background: rgba(255,255,255,0.82);
+      color: var(--text-primary);
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .secondary-login-btn:hover {
+      border-color: rgba(212,175,55,0.28);
+      background: rgba(212,175,55,0.06);
+    }
+
+    .login-security {
+      margin-top: 1.5rem;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 980px) {
+      .system-container {
+        grid-template-columns: 1fr;
+      }
+
+      .system-right {
+        border-left: none;
+        border-top: 1px solid rgba(13,94,255,0.08);
+      }
+
+      .system-left {
+        padding: 3rem;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .system-screen {
+        padding: 1rem;
+      }
+
+      .system-left,
+      .system-right {
+        padding: 2rem;
+      }
+
+      .system-left h2 {
+        font-size: 2.7rem;
+      }
+
+      .login-panel {
+        padding: 2rem;
+      }
+    }
+
+  </style>
+
 </body>
 </html>
