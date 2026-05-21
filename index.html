@@ -1,1185 +1,219 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZYNTRA Performance System</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg-primary: #f4f8fc;
-      --bg-secondary: #ffffff;
-      --bg-card: rgba(255, 255, 255, 0.82);
-      --accent: #0d5eff;
-      --accent-soft: #5ea8ff;
-      --gold: #d4af37;
-      --gold-soft: #f3d57a;
-      --text-primary: #0f172a;
-      --text-secondary: #5f6b7a;
-      --success: #12b76a;
-      --border: rgba(13, 94, 255, 0.08);
-      --glow: 0 10px 40px rgba(13,94,255,0.10);
-    }
-
-    body {
-      background:
-        radial-gradient(circle at top right, rgba(13,94,255,0.10), transparent 25%),
-        radial-gradient(circle at bottom left, rgba(212,175,55,0.10), transparent 25%),
-        linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
-      color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      opacity: 0.4;
-    }
-
-    .container {
-      width: min(1400px, 92%);
-      margin: 0 auto;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(18px);
-      background: rgba(255,255,255,0.82);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 0;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo img {
-      height: 58px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 8px 20px rgba(13,94,255,0.12));
-    }
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZYNTRA | Performance System</title>
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FBFBFE;
+            color: #1D1D1F;
+        }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
+        .gold-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #C5A028 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    .mini-cart {
-      background: rgba(255,255,255,0.75);
-      border: 1px solid var(--border);
-      padding: 0.8rem 1rem;
-      border-radius: 18px;
-      display: flex;
-      flex-direction: column;
-      min-width: 210px;
-    }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
 
-    .mini-cart small {
-      color: var(--text-secondary);
-      margin-bottom: 4px;
-    }
+        .premium-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
 
-    .support-btn {
-      background: linear-gradient(135deg, var(--gold), var(--gold-soft));
-      color: #0f172a;
-      border: none;
-      border-radius: 14px;
-      padding: 0.9rem 1.3rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
+        .premium-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.06);
+            border-color: #D4AF37;
+        }
 
-    .support-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--glow);
-    }
+        .btn-navy {
+            background-color: #001F3F;
+            transition: all 0.3s ease;
+        }
 
-    .hero {
-      padding: 5rem 0 3rem;
-    }
+        .btn-navy:hover {
+            background-color: #001122;
+            box-shadow: 0 10px 20px rgba(0, 31, 63, 0.2);
+            transform: scale(1.02);
+        }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 3rem;
-      align-items: center;
-    }
+        /* Animação de entrada suave */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid rgba(13,94,255,0.12);
-      background: rgba(13,94,255,0.06);
-      padding: 0.6rem 1rem;
-      border-radius: 999px;
-      color: var(--accent);
-      font-size: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
 
-    .hero h2 {
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      line-height: 1;
-      margin-bottom: 1.5rem;
-      max-width: 700px;
-    }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
 
-    .hero p {
-      color: var(--text-secondary);
-      line-height: 1.7;
-      max-width: 650px;
-      font-size: 1.05rem;
-      margin-bottom: 2rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .primary-btn,
-    .secondary-btn {
-      padding: 1rem 1.5rem;
-      border-radius: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s ease;
-      border: none;
-    }
-
-    .primary-btn {
-      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-      color: var(--text-primary);
-      box-shadow: var(--glow);
-    }
-
-    .secondary-btn {
-      background: rgba(255,255,255,0.85);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-    }
-
-    .hero-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
-      border: 1px solid rgba(13,94,255,0.08);
-      border-radius: 30px;
-      padding: 2rem;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 20px 50px rgba(13,94,255,0.08);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-card::before {
-      content: '';
-      position: absolute;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(212,175,55,0.20), transparent 70%);
-      top: -100px;
-      right: -100px;
-    }
-
-    .protocol-title {
-      color: var(--accent);
-      letter-spacing: 2px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .protocol-name {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .protocol-description {
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 2rem;
-    }
-
-    .protocol-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-    }
-
-    .tag {
-      background: rgba(13,94,255,0.05);
-      border: 1px solid var(--border);
-      padding: 0.6rem 1rem;
-      border-radius: 999px;
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-    }
-
-    .products-section {
-      padding: 2rem 0 6rem;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .section-header h3 {
-      font-size: 2rem;
-    }
-
-    .search-bar {
-      flex: 1;
-      max-width: 450px;
-      position: relative;
-    }
-
-    .search-bar input {
-      width: 100%;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1rem 1.2rem;
-      color: var(--text-primary);
-      outline: none;
-      backdrop-filter: blur(12px);
-    }
-
-    .chips {
-      display: flex;
-      gap: 0.7rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-
-    .chip {
-      padding: 0.65rem 1rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .chip:hover {
-      border-color: rgba(29,233,214,0.35);
-      color: var(--accent);
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .product-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,251,255,0.92));
-      border: 1px solid rgba(13,94,255,0.08);
-      border-radius: 28px;
-      padding: 1.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: 0.35s ease;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 10px 30px rgba(15,23,42,0.04);
-    }
-
-    .product-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(212,175,55,0.20);
-      box-shadow: var(--glow);
-    }
-
-    .product-card::before {
-      content: '';
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      background: radial-gradient(circle, rgba(13,94,255,0.12), transparent 70%);
-      top: -60px;
-      right: -60px;
-    }
-
-    .product-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.2rem;
-    }
-
-    .badge {
-      background: rgba(212,175,55,0.12);
-      border: 1px solid rgba(212,175,55,0.18);
-      color: var(--accent);
-      padding: 0.5rem 0.8rem;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .product-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-    }
-
-    .product-name {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .product-dose {
-      color: var(--accent);
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-    }
-
-    .product-description {
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 2rem;
-    }
-
-    .product-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .price {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .price span {
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-    }
-
-    .price strong {
-      font-size: 1.5rem;
-    }
-
-    .add-btn {
-      border: none;
-      border-radius: 14px;
-      background: rgba(13,94,255,0.05);
-      border: 1px solid rgba(29,233,214,0.18);
-      color: var(--accent);
-      padding: 0.9rem 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .add-btn:hover {
-      background: linear-gradient(135deg, var(--gold), var(--gold-soft));
-      color: #0f172a;
-      box-shadow: var(--glow);
-    }
-
-    .floating-protocol {
-      position: fixed;
-      right: 30px;
-      bottom: 30px;
-      width: 340px;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(13,94,255,0.08);
-      border-radius: 28px;
-      padding: 1.5rem;
-      z-index: 100;
-      box-shadow: 0 20px 60px rgba(13,94,255,0.10);
-    }
-
-    .floating-protocol h4 {
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
-
-    .protocol-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      color: var(--text-secondary);
-    }
-
-    .protocol-total {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1.5rem;
-      align-items: center;
-    }
-
-    .protocol-total strong {
-      font-size: 1.7rem;
-    }
-
-    .checkout-btn {
-      width: 100%;
-      margin-top: 1.2rem;
-      padding: 1rem;
-      border-radius: 16px;
-      border: none;
-      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-      color: white;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .checkout-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--glow);
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .floating-protocol {
-        width: calc(100% - 30px);
-        right: 15px;
-        bottom: 15px;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-
-      .header-right {
-        width: 100%;
-        flex-direction: column;
-      }
-
-      .mini-cart,
-      .support-btn {
-        width: 100%;
-      }
-
-      .hero {
-        padding-top: 3rem;
-      }
-
-      .hero h2 {
-        font-size: 2.7rem;
-      }
-
-      .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .search-bar {
-        width: 100%;
-        max-width: none;
-      }
-    }
-  </style>
+        /* Esconder scrollbar mas manter funcionalidade */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body>
+<body class="antialiased">
 
-  <header>
-    <div class="container navbar">
+    <!-- Navegação -->
+    <nav class="glass-nav fixed top-0 w-full z-50 border-b border-gray-100 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#001F3F] rounded-full flex items-center justify-center shadow-lg">
+                    <div class="w-3 h-3 border-2 border-[#D4AF37] rotate-45"></div>
+                </div>
+                <span class="font-bold tracking-[0.2em] text-xl text-[#001F3F]">ZYNTRA</span>
+            </div>
 
-      <div class="logo">
-        <img src="/assets/zyntralogo1.png" alt="Zyntra Logo">
-      </div>
+            <div class="hidden md:flex gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Protocolos</a>
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Segurança</a>
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Suporte</a>
+            </div>
 
-      <div class="header-right">
-
-        <div class="mini-cart">
-          <small>Protocolo Atual</small>
-          <strong>2 compostos selecionados</strong>
+            <div class="flex items-center gap-5">
+                <div class="hidden sm:block text-right">
+                    <p class="text-[9px] text-gray-400 uppercase font-bold tracking-tighter">Subtotal</p>
+                    <p class="text-sm font-bold text-[#001F3F]">R$ 1.850,00</p>
+                </div>
+                <button class="relative bg-[#001F3F] p-2.5 rounded-full text-white">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-[#D4AF37] border-2 border-white rounded-full text-[9px] flex items-center justify-center font-bold text-[#001F3F]">2</span>
+                </button>
+            </div>
         </div>
+    </nav>
 
-        <button class="support-btn">
-          Atendimento Privado
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+        
+        <!-- Hero Section -->
+        <header class="mb-20 animate-fade-in">
+            <h2 class="text-[#D4AF37] font-bold tracking-[0.4em] text-[10px] mb-4 uppercase">Bio-Performance Private System</h2>
+            <h1 class="text-5xl md:text-7xl font-light tracking-tight text-[#001F3F] leading-[1.1] mb-8">
+                Protocolos de elite para <br>
+                <span class="italic font-serif gold-gradient font-semibold">performance humana.</span>
+            </h1>
+
+            <div class="relative max-w-2xl group">
+                <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#D4AF37] transition-colors w-5 h-5"></i>
+                <input type="text" placeholder="Buscar composto ou objetivo (ex: Recovery)..." 
+                class="w-full bg-white border border-gray-100 py-6 pl-14 pr-6 rounded-[24px] shadow-sm focus:outline-none focus:ring-4 focus:ring-[#D4AF37]/5 focus:border-[#D4AF37]/30 transition-all text-lg font-light">
+            </div>
+        </header>
+
+        <!-- Grid de Produtos -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Produto 1 -->
+            <div class="premium-card rounded-[40px] p-8 flex flex-col justify-between animate-fade-in delay-1">
+                <div>
+                    <div class="flex justify-between items-start mb-10">
+                        <span class="bg-[#D4AF37]/10 text-[#C5A028] text-[9px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">Performance</span>
+                        <i data-lucide="info" class="w-5 h-5 text-gray-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#001F3F] mb-2 tracking-tight">CJC-1295 + Ipamorelin</h3>
+                    <p class="text-gray-400 text-sm font-light mb-8">Estímulo avançado de GH e recuperação tecidual.</p>
+                    
+                    <div class="w-full h-40 bg-gray-50 rounded-3xl mb-8 flex items-center justify-center group-hover:bg-white transition-colors">
+                        <i data-lucide="microscope" class="w-12 h-12 text-[#D4AF37] opacity-40"></i>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-6 border-t border-gray-50">
+                    <div>
+                        <span class="text-[9px] text-gray-400 block uppercase font-bold tracking-widest mb-1">Investimento</span>
+                        <span class="text-xl font-bold text-[#001F3F]">R$ 550,00</span>
+                    </div>
+                    <button class="btn-navy p-4 rounded-2xl text-white">
+                        <i data-lucide="plus" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Produto 2 -->
+            <div class="premium-card rounded-[40px] p-8 flex flex-col justify-between animate-fade-in delay-2">
+                <div>
+                    <div class="flex justify-between items-start mb-10">
+                        <span class="bg-[#D4AF37]/10 text-[#C5A028] text-[9px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">Longevidade</span>
+                        <i data-lucide="info" class="w-5 h-5 text-gray-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#001F3F] mb-2 tracking-tight">Cardiogen</h3>
+                    <p class="text-gray-400 text-sm font-light mb-8">Bio-regulador peptídico para saúde cardiovascular.</p>
+                    
+                    <div class="w-full h-40 bg-gray-50 rounded-3xl mb-8 flex items-center justify-center">
+                        <i data-lucide="activity" class="w-12 h-12 text-[#D4AF37] opacity-40"></i>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-6 border-t border-gray-50">
+                    <div>
+                        <span class="text-[9px] text-gray-400 block uppercase font-bold tracking-widest mb-1">Investimento</span>
+                        <span class="text-xl font-bold text-[#001F3F]">R$ 480,00</span>
+                    </div>
+                    <button class="btn-navy p-4 rounded-2xl text-white">
+                        <i data-lucide="plus" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Produto CTA (Diferencial) -->
+            <div class="bg-[#001F3F] rounded-[40px] p-10 flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden animate-fade-in delay-2">
+                <div class="w-16 h-16 bg-[#D4AF37] rounded-2xl mb-6 flex items-center justify-center rotate-12 shadow-xl">
+                    <i data-lucide="shield-check" class="w-8 h-8 text-[#001F3F] -rotate-12"></i>
+                </div>
+                <h3 class="text-white text-xl font-bold mb-3">Protocolo via IA</h3>
+                <p class="text-blue-100/60 text-sm font-light mb-8 italic">Análise molecular personalizada baseada nos seus exames e objetivos.</p>
+                <button class="w-full py-4 bg-white text-[#001F3F] rounded-2xl font-bold hover:bg-[#D4AF37] hover:text-white transition-all uppercase tracking-widest text-xs">
+                    Iniciar Análise
+                </button>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Botão de Ação Flutuante -->
+    <div class="fixed bottom-10 left-0 w-full flex justify-center px-6 pointer-events-none">
+        <button class="pointer-events-auto bg-[#001F3F] text-white px-10 py-5 rounded-full shadow-2xl flex items-center gap-4 hover:scale-105 transition-transform group">
+            <span class="font-bold tracking-[0.2em] text-[10px] uppercase">Gerar Pedido Seguro</span>
+            <div class="w-6 h-6 bg-[#D4AF37] rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-[#001F3F]"></i>
+            </div>
         </button>
-
-      </div>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="container hero-grid">
-
-      <div>
-        <div class="eyebrow">
-          Plataforma Privada • Performance Humana
-        </div>
-
-        <h2>
-          Infraestrutura premium para protocolos avançados.
-        </h2>
-
-        <p>
-          Uma experiência desenvolvida para transformar a seleção de peptídeos,
-          stacks e protocolos em algo sofisticado, intuitivo e extremamente confiável.
-        </p>
-
-        <div class="hero-actions">
-          <button class="primary-btn">
-            Entrar no Sistema
-          </button>
-
-          <button class="secondary-btn">
-            Explorar Protocolos
-          </button>
-        </div>
-      </div>
-
-      <div class="hero-card">
-
-        <div class="protocol-title">
-          Protocolo em destaque
-        </div>
-
-        <div class="protocol-name">
-          PERFORMANCE MAX
-        </div>
-
-        <p class="protocol-description">
-          Stack avançado para recuperação, estímulo de GH,
-          performance física e melhora da qualidade do sono.
-        </p>
-
-        <div class="protocol-tags">
-          <div class="tag">GH Support</div>
-          <div class="tag">Recovery</div>
-          <div class="tag">Performance</div>
-          <div class="tag">Longevity</div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <section class="products-section">
-    <div class="container">
-
-      <div class="section-header">
-        <h3>Protocolos & Compostos</h3>
-
-        <div class="search-bar">
-          <input type="text" placeholder="Buscar composto, protocolo ou objetivo...">
-        </div>
-      </div>
-
-      <div class="chips">
-        <div class="chip">Performance</div>
-        <div class="chip">Recovery</div>
-        <div class="chip">Sono</div>
-        <div class="chip">GH Support</div>
-        <div class="chip">Focus</div>
-        <div class="chip">Cutting</div>
-      </div>
-
-      <div class="products-grid">
-
-        <div class="product-card">
-
-          <div class="product-top">
-            <div class="badge">GH Support</div>
-            <div class="product-icon">🧬</div>
-          </div>
-
-          <div class="product-name">
-            CJC-1295 + IPA
-          </div>
-
-          <div class="product-dose">
-            5mg / 5mg
-          </div>
-
-          <p class="product-description">
-            Estímulo avançado de GH, recuperação muscular e melhora da qualidade do sono.
-          </p>
-
-          <div class="product-footer">
-            <div class="price">
-              <span>Valor</span>
-              <strong>R$ 500</strong>
-            </div>
-
-            <button class="add-btn">
-              Adicionar
-            </button>
-          </div>
-
-        </div>
-
-        <div class="product-card">
-
-          <div class="product-top">
-            <div class="badge">Recovery</div>
-            <div class="product-icon">⚡</div>
-          </div>
-
-          <div class="product-name">
-            BPC-157
-          </div>
-
-          <div class="product-dose">
-            10mg
-          </div>
-
-          <p class="product-description">
-            Recuperação avançada muscular e suporte para processos regenerativos.
-          </p>
-
-          <div class="product-footer">
-            <div class="price">
-              <span>Valor</span>
-              <strong>R$ 390</strong>
-            </div>
-
-            <button class="add-btn">
-              Adicionar
-            </button>
-          </div>
-
-        </div>
-
-        <div class="product-card">
-
-          <div class="product-top">
-            <div class="badge">Performance</div>
-            <div class="product-icon">🚀</div>
-          </div>
-
-          <div class="product-name">
-            Cardarine GW
-          </div>
-
-          <div class="product-dose">
-            10mg
-          </div>
-
-          <p class="product-description">
-            Resistência cardiovascular, performance e melhora do condicionamento.
-          </p>
-
-          <div class="product-footer">
-            <div class="price">
-              <span>Valor</span>
-              <strong>R$ 320</strong>
-            </div>
-
-            <button class="add-btn">
-              Adicionar
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="floating-protocol">
-
-    <h4>Seu Protocolo</h4>
-
-    <div class="protocol-item">
-      <span>CJC-1295 + IPA</span>
-      <strong>R$ 500</strong>
     </div>
 
-    <div class="protocol-item">
-      <span>BPC-157</span>
-      <strong>R$ 390</strong>
-    </div>
-
-    <div class="protocol-total">
-      <span>Total</span>
-      <strong>R$ 890</strong>
-    </div>
-
-    <button class="checkout-btn">
-      Gerar Pedido Seguro
-    </button>
-
-  </div>
-
-  <!-- ========================= -->
-  <!-- TELA: ENTRAR NO SISTEMA -->
-  <!-- ========================= -->
-
-  <section class="system-screen">
-
-    <div class="system-bg-glow"></div>
-
-    <div class="system-container">
-
-      <div class="system-left">
-
-        <img src="/assets/zyntralogo1.png" alt="Zyntra Logo" class="system-logo">
-
-        <div class="system-badge">
-          ACESSO PRIVADO • ZYNTRA PERFORMANCE
-        </div>
-
-        <h2>
-          Bem-vindo ao ecossistema premium da Zyntra.
-        </h2>
-
-        <p>
-          Uma infraestrutura privada desenvolvida para seleção de protocolos,
-          stacks avançados e acompanhamento seguro de pedidos.
-        </p>
-
-        <div class="system-info-grid">
-
-          <div class="system-info-card">
-            <div class="system-info-icon">01</div>
-            <div>
-              <strong>Protocolos Inteligentes</strong>
-              <span>Stacks avançados organizados por objetivo e performance.</span>
-            </div>
-          </div>
-
-          <div class="system-info-card">
-            <div class="system-info-icon">02</div>
-            <div>
-              <strong>Ambiente Seguro</strong>
-              <span>Experiência privada com rastreio e atendimento dedicado.</span>
-            </div>
-          </div>
-
-          <div class="system-info-card">
-            <div class="system-info-icon">03</div>
-            <div>
-              <strong>Fluxo Premium</strong>
-              <span>Pedidos simplificados com experiência refinada.</span>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="system-right">
-
-        <div class="login-panel">
-
-          <div class="login-top">
-            <span class="login-kicker">ACESSO AO SISTEMA</span>
-            <h3>Entrar no Sistema</h3>
-            <p>
-              Acesse sua área privada e continue seu protocolo.
-            </p>
-          </div>
-
-          <form class="login-form">
-
-            <div class="login-input-group">
-              <label>Email</label>
-              <input type="email" placeholder="seuemail@exemplo.com">
-            </div>
-
-            <div class="login-input-group">
-              <label>Senha</label>
-              <input type="password" placeholder="••••••••••••">
-            </div>
-
-            <div class="login-row">
-              <label>
-                <input type="checkbox">
-                Manter conectado
-              </label>
-
-              <a href="#">Recuperar acesso</a>
-            </div>
-
-            <button class="login-btn">
-              Acessar Plataforma
-            </button>
-
-          </form>
-
-          <div class="login-divider">
-            <span>ou</span>
-          </div>
-
-          <button class="secondary-login-btn">
-            Solicitar novo acesso
-          </button>
-
-          <div class="login-security">
-            🔒 Ambiente protegido e monitorado.
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <style>
-
-    .system-screen {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 2rem;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top right, rgba(13,94,255,0.08), transparent 25%),
-        radial-gradient(circle at bottom left, rgba(212,175,55,0.10), transparent 30%),
-        linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
-    }
-
-    .system-bg-glow {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(13,94,255,0.12), transparent 70%);
-      top: -250px;
-      right: -180px;
-      pointer-events: none;
-    }
-
-    .system-container {
-      width: min(1400px, 100%);
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      border-radius: 38px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(13,94,255,0.08);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 30px 100px rgba(13,94,255,0.10);
-      position: relative;
-      z-index: 2;
-    }
-
-    .system-left {
-      padding: 5rem;
-      position: relative;
-    }
-
-    .system-logo {
-      height: 65px;
-      margin-bottom: 2rem;
-    }
-
-    .system-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.7rem 1rem;
-      border-radius: 999px;
-      background: rgba(13,94,255,0.06);
-      border: 1px solid rgba(13,94,255,0.10);
-      color: var(--accent);
-      font-size: 0.78rem;
-      letter-spacing: 1.5px;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-    }
-
-    .system-left h2 {
-      font-size: clamp(3rem, 6vw, 5rem);
-      line-height: 0.95;
-      margin-bottom: 1.5rem;
-      max-width: 650px;
-    }
-
-    .system-left p {
-      color: var(--text-secondary);
-      line-height: 1.9;
-      max-width: 580px;
-      font-size: 1.05rem;
-      margin-bottom: 3rem;
-    }
-
-    .system-info-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .system-info-card {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.2rem;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(13,94,255,0.08);
-      backdrop-filter: blur(12px);
-    }
-
-    .system-info-icon {
-      min-width: 54px;
-      height: 54px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      box-shadow: var(--glow);
-    }
-
-    .system-info-card strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .system-info-card span {
-      color: var(--text-secondary);
-      line-height: 1.5;
-      font-size: 0.92rem;
-    }
-
-    .system-right {
-      background: rgba(255,255,255,0.55);
-      border-left: 1px solid rgba(13,94,255,0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem;
-    }
-
-    .login-panel {
-      width: 100%;
-      max-width: 460px;
-      background: rgba(255,255,255,0.86);
-      border: 1px solid rgba(13,94,255,0.08);
-      border-radius: 32px;
-      padding: 2.5rem;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 20px 50px rgba(15,23,42,0.06);
-    }
-
-    .login-kicker {
-      color: var(--accent);
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-      font-weight: 700;
-    }
-
-    .login-top h3 {
-      font-size: 2.4rem;
-      margin: 1rem 0;
-    }
-
-    .login-top p {
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 2rem;
-    }
-
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .login-input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .login-input-group label {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .login-input-group input {
-      padding: 1rem 1.2rem;
-      border-radius: 18px;
-      border: 1px solid rgba(13,94,255,0.08);
-      background: rgba(255,255,255,0.92);
-      outline: none;
-      transition: 0.3s ease;
-      font-size: 1rem;
-    }
-
-    .login-input-group input:focus {
-      border-color: rgba(13,94,255,0.28);
-      box-shadow: 0 0 0 5px rgba(13,94,255,0.06);
-    }
-
-    .login-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-top: -4px;
-    }
-
-    .login-row a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .login-btn {
-      margin-top: 1rem;
-      border: none;
-      padding: 1.1rem;
-      border-radius: 18px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-      color: white;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s ease;
-      box-shadow: var(--glow);
-    }
-
-    .login-btn:hover {
-      transform: translateY(-3px);
-    }
-
-    .login-divider {
-      position: relative;
-      text-align: center;
-      margin: 2rem 0;
-    }
-
-    .login-divider::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: rgba(13,94,255,0.08);
-    }
-
-    .login-divider span {
-      position: relative;
-      padding: 0 1rem;
-      background: white;
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-    }
-
-    .secondary-login-btn {
-      width: 100%;
-      padding: 1rem;
-      border-radius: 18px;
-      border: 1px solid rgba(13,94,255,0.08);
-      background: rgba(255,255,255,0.82);
-      color: var(--text-primary);
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .secondary-login-btn:hover {
-      border-color: rgba(212,175,55,0.28);
-      background: rgba(212,175,55,0.06);
-    }
-
-    .login-security {
-      margin-top: 1.5rem;
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 980px) {
-      .system-container {
-        grid-template-columns: 1fr;
-      }
-
-      .system-right {
-        border-left: none;
-        border-top: 1px solid rgba(13,94,255,0.08);
-      }
-
-      .system-left {
-        padding: 3rem;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .system-screen {
-        padding: 1rem;
-      }
-
-      .system-left,
-      .system-right {
-        padding: 2rem;
-      }
-
-      .system-left h2 {
-        font-size: 2.7rem;
-      }
-
-      .login-panel {
-        padding: 2rem;
-      }
-    }
-
-  </style>
-
+    <!-- Scripts de Ícones -->
+    <script>
+        lucide.createIcons();
+        
+        // Efeito de scroll no header
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('py-3', 'shadow-sm');
+                nav.classList.remove('py-4');
+            } else {
+                nav.classList.add('py-4');
+                nav.classList.remove('py-3', 'shadow-sm');
+            }
+        });
+    </script>
 </body>
 </html>
