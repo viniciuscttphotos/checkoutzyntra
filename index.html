@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZYNTRA STORE | Premium Bio-Performance</title>
+    <title>ZYNTRA | Premium Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root { --navy: #001F3F; --gold: #D4AF37; --ice: #FBFBFE; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--ice); color: #1D1D1F; scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--ice); color: #1D1D1F; }
         
         .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
         
-        /* Estilo E-commerce */
         .product-card {
             background: white;
-            border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.03);
         }
         .product-card:hover {
             transform: translateY(-5px);
@@ -26,257 +25,290 @@
             border-color: var(--gold);
         }
 
-        .cart-drawer {
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        #cart-drawer {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .cart-drawer.open { transform: translateX(0); }
+        .drawer-open { transform: translateX(0) !important; }
 
-        .badge-new {
-            background: linear-gradient(135deg, var(--gold), #C5A028);
-            color: white;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 10px;
-            border-radius: 4px;
-            text-transform: uppercase;
+        /* Scrollbar customisada */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .active-filter {
+            background-color: var(--navy) !important;
+            color: white !important;
         }
-
-        /* Animação simples de adição ao carrinho */
-        @keyframes cart-bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-        .cart-animate { animation: cart-bounce 0.3s ease-in-out; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased overflow-x-hidden">
 
-    <!-- BARRA DE AVISO (TOP HEADER) -->
+    <!-- ANNOUNCEMENT BAR -->
     <div class="bg-[#001F3F] text-white text-[10px] py-2 text-center font-bold tracking-[0.2em] uppercase">
-        Envio prioritário e discreto para todo o Brasil • Pagamento Seguro
+        Logística Privada • Envio em Embalagem Neutra • Suporte VIP
     </div>
 
-    <!-- HEADER / NAV -->
+    <!-- STICKY HEADER -->
     <nav class="glass sticky top-0 w-full z-50 border-b border-gray-100 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Logo -->
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
                 <div class="w-8 h-8 bg-[#001F3F] rounded-lg flex items-center justify-center">
-                    <i data-lucide="zap" class="w-5 h-5 text-[#D4AF37]"></i>
+                    <i data-lucide="component" class="w-5 h-5 text-[#D4AF37]"></i>
                 </div>
-                <span class="font-black tracking-tighter text-2xl text-[#001F3F]">ZYNTRA<span class="text-[#D4AF37]">.</span></span>
+                <span class="font-bold tracking-tighter text-2xl text-[#001F3F]">ZYNTRA</span>
             </div>
 
-            <!-- Links E-commerce -->
-            <div class="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-gray-500">
-                <a href="#" class="hover:text-[#D4AF37] transition">Loja</a>
-                <a href="#" class="hover:text-[#D4AF37] transition">Protocolos</a>
-                <a href="#" class="hover:text-[#D4AF37] transition">Sobre a Ciência</a>
+            <div class="hidden md:flex gap-8 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+                <button onclick="scrollToShop()" class="hover:text-[#D4AF37] transition">Compostos</button>
+                <button class="hover:text-[#D4AF37] transition">Protocolos</button>
+                <button class="hover:text-[#D4AF37] transition">Segurança</button>
             </div>
 
-            <!-- Ações -->
-            <div class="flex items-center gap-5">
-                <button class="text-gray-400 hover:text-[#001F3F]"><i data-lucide="search" class="w-5 h-5"></i></button>
-                <button class="text-gray-400 hover:text-[#001F3F] hidden sm:block"><i data-lucide="user" class="w-5 h-5"></i></button>
-                <button onclick="toggleCart()" class="relative flex items-center gap-2 bg-[#001F3F] text-white px-4 py-2 rounded-full hover:bg-black transition group" id="cart-btn-nav">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCart()" class="relative flex items-center gap-2 bg-[#001F3F] text-white px-5 py-2.5 rounded-full hover:bg-black transition-all shadow-lg active:scale-95">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                    <span class="text-xs font-bold" id="cart-count">0</span>
+                    <span id="cart-count" class="text-xs font-bold bg-[#D4AF37] text-[#001F3F] min-w-[1.25rem] h-5 px-1 rounded-full flex items-center justify-center ml-1">0</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <header class="relative bg-white pt-16 pb-24 px-6 overflow-hidden">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div>
-                <span class="badge-new mb-4 inline-block">New Season 2024</span>
-                <h1 class="text-5xl md:text-7xl font-bold text-[#001F3F] leading-[1.05] mb-6 tracking-tighter">
-                    Bio-Performance <br><span class="text-[#D4AF37] italic">Sem Limites.</span>
-                </h1>
-                <p class="text-gray-500 text-lg mb-8 max-w-md leading-relaxed">
-                    A maior autoridade em peptídeos e protocolos de alta performance do Brasil. Tecnologia molecular aplicada ao seu resultado.
-                </p>
-                <div class="flex gap-4">
-                    <a href="#shop" class="bg-[#001F3F] text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-widest hover:shadow-2xl transition">Ver Catálogo</a>
-                    <button onclick="toggleScan()" class="border border-gray-200 text-[#001F3F] px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-widest hover:border-[#D4AF37] transition">IA Bio-Scan</button>
-                </div>
-            </div>
-            <div class="relative">
-                <div class="w-full h-[400px] bg-gray-50 rounded-[40px] flex items-center justify-center relative overflow-hidden shadow-inner">
-                    <i data-lucide="microscope" class="w-40 h-40 text-gray-100 absolute -bottom-10 -right-10"></i>
-                    <div class="text-center animate-bounce">
-                        <div class="w-24 h-24 bg-white shadow-2xl rounded-3xl flex items-center justify-center mx-auto mb-4 border border-[#D4AF37]/20">
-                            <i data-lucide="box" class="w-10 h-10 text-[#D4AF37]"></i>
-                        </div>
-                        <p class="font-bold text-[#001F3F] uppercase tracking-tighter">Premium Delivery</p>
-                    </div>
-                </div>
+    <!-- HERO -->
+    <section class="bg-white pt-20 pb-24 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-6xl md:text-8xl font-bold text-[#001F3F] tracking-tighter leading-none mb-8">
+                Bio-Performance <br> <span class="italic font-serif text-[#D4AF37]">Premium.</span>
+            </h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                Acesse a vanguarda da performance humana. Compostos de pureza farmacêutica com logística privada e discreta.
+            </p>
+            
+            <!-- SEARCH BAR -->
+            <div class="relative max-w-xl mx-auto">
+                <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5"></i>
+                <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Buscar composto ou objetivo..." 
+                class="w-full bg-gray-50 border border-gray-100 py-5 pl-14 pr-6 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-all shadow-sm">
             </div>
         </div>
-    </header>
+    </section>
 
-    <!-- FILTROS / SHOP SECTION -->
+    <!-- SHOPPING AREA -->
     <main id="shop" class="max-w-7xl mx-auto px-6 py-20">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div>
-                <h2 class="text-3xl font-bold text-[#001F3F] tracking-tighter">Produtos em Destaque</h2>
-                <p class="text-gray-400 text-sm">Selecione os compostos para seu protocolo</p>
+        <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+            <div class="flex gap-2 overflow-x-auto no-scrollbar w-full md:w-auto">
+                <button onclick="filterBy('all')" id="filter-all" class="filter-btn active-filter px-6 py-2.5 rounded-xl border border-gray-100 text-[10px] font-bold uppercase tracking-widest transition-all">Todos</button>
+                <button onclick="filterBy('performance')" id="filter-performance" class="filter-btn bg-white px-6 py-2.5 rounded-xl border border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:border-[#D4AF37] transition-all">Performance</button>
+                <button onclick="filterBy('recovery')" id="filter-recovery" class="filter-btn bg-white px-6 py-2.5 rounded-xl border border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:border-[#D4AF37] transition-all">Recuperação</button>
             </div>
-            <div class="flex gap-2">
-                <button onclick="filterShop('all')" class="px-5 py-2 rounded-lg bg-[#001F3F] text-white text-xs font-bold uppercase tracking-widest transition">Todos</button>
-                <button onclick="filterShop('performance')" class="px-5 py-2 rounded-lg bg-white border border-gray-100 text-gray-500 text-xs font-bold uppercase tracking-widest hover:border-[#D4AF37] transition">Performance</button>
-                <button onclick="filterShop('recovery')" class="px-5 py-2 rounded-lg bg-white border border-gray-100 text-gray-500 text-xs font-bold uppercase tracking-widest hover:border-[#D4AF37] transition">Recuperação</button>
-            </div>
+            <p class="text-[10px] font-bold text-gray-300 uppercase tracking-widest" id="product-results-count">Exibindo todos os compostos</p>
         </div>
 
-        <!-- GRID DE PRODUTOS -->
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Itens injetados via JS -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Renderizado via Javascript -->
         </div>
     </main>
 
-    <!-- CARRINHO LATERAL (DRAWER) -->
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-[60] hidden"></div>
-    <div id="drawer" class="cart-drawer fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl flex flex-col">
-        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i data-lucide="shopping-cart" class="w-5 h-5 text-[#D4AF37]"></i>
-                <h3 class="font-bold text-[#001F3F] uppercase tracking-widest text-sm">Meu Carrinho</h3>
-            </div>
-            <button onclick="toggleCart()" class="p-2 hover:bg-gray-100 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <!-- CART DRAWER -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
+    
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl translate-x-full flex flex-col">
+        <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-white sticky top-0">
+            <h3 class="font-bold text-[#001F3F] uppercase tracking-widest text-sm flex items-center gap-2">
+                <i data-lucide="shopping-bag" class="w-4 h-4 text-[#D4AF37]"></i> Meu Carrinho
+            </h3>
+            <button onclick="toggleCart()" class="p-2 hover:bg-gray-50 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
 
-        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <!-- Itens do carrinho aparecem aqui -->
-            <p id="empty-msg" class="text-center text-gray-400 mt-20 text-sm">Seu carrinho está vazio.</p>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
+            <!-- Itens do carrinho -->
         </div>
 
-        <div class="p-6 bg-gray-50 border-t border-gray-100 space-y-4">
-            <div class="flex justify-between items-center">
-                <span class="text-gray-500 font-medium">Subtotal</span>
-                <span id="cart-total" class="text-xl font-bold text-[#001F3F]">R$ 0,00</span>
+        <div class="p-8 bg-gray-50 border-t border-gray-100">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Total Estimado</p>
+                    <p id="cart-total" class="text-3xl font-bold text-[#001F3F]">R$ 0,00</p>
+                </div>
+                <i data-lucide="shield-check" class="text-[#D4AF37] w-6 h-6 mb-1"></i>
             </div>
-            <p class="text-[10px] text-gray-400 text-center uppercase tracking-widest">Frete e impostos calculados no checkout</p>
-            <button onclick="checkout()" class="w-full bg-[#001F3F] text-white py-5 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-2">
-                Finalizar Compra <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            <button onclick="sendOrder()" class="w-full bg-[#001F3F] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-black transition-all shadow-xl active:scale-95">
+                Finalizar via WhatsApp Prioritário
             </button>
         </div>
     </div>
 
     <script>
-        // DATA
-        const products = [
-            { id: 1, name: 'CJC-1295 + IPA', dose: 'Protocolo 10mg', price: 520.00, cat: 'performance', img: 'activity' },
-            { id: 2, name: 'BPC-157 Elite', dose: 'Vial 5mg', price: 390.00, cat: 'recovery', img: 'shield-plus' },
-            { id: 3, name: 'Cardarine GW', dose: '60 caps / 20mg', price: 380.00, cat: 'performance', img: 'zap' },
-            { id: 4, name: 'Epithalon', dose: 'Vial 10mg', price: 560.00, cat: 'longevity', img: 'hourglass' },
-            { id: 5, name: 'TB-500 Pro', dose: 'Vial 5mg', price: 450.00, cat: 'recovery', img: 'replicate' },
-            { id: 6, name: 'MK-677', dose: '30 caps / 25mg', price: 410.00, cat: 'performance', img: 'target' }
-        ];
+        // ESTADO GLOBAL DO APP
+        const State = {
+            products: [
+                { id: 1, name: 'CJC-1295 + Ipamorelin', dose: 'Protocolo 10mg', price: 520, cat: 'performance', icon: 'zap' },
+                { id: 2, name: 'BPC-157 Elite', dose: 'Vial 5mg', price: 390, cat: 'recovery', icon: 'shield-plus' },
+                { id: 3, name: 'Cardarine GW-501516', dose: '60 caps / 20mg', price: 380, cat: 'performance', icon: 'activity' },
+                { id: 4, name: 'Epithalon', dose: 'Vial 10mg', price: 560, cat: 'recovery', icon: 'hourglass' },
+                { id: 5, name: 'TB-500 Pro', dose: 'Vial 5mg', price: 450, cat: 'recovery', icon: 'replicate' },
+                { id: 6, name: 'MK-677 Ibutamoren', dose: '30 caps / 25mg', price: 410, cat: 'performance', icon: 'target' },
+                { id: 7, name: 'Tesamorelin', dose: 'Vial 10mg', price: 680, cat: 'performance', icon: 'flame' },
+                { id: 8, name: 'Melanotan II', dose: 'Vial 10mg', price: 320, cat: 'performance', icon: 'sun' }
+            ],
+            cart: [],
+            currentFilter: 'all',
+            searchQuery: ''
+        };
 
-        let cart = [];
-
-        // RENDER SHOP
-        function renderShop(items = products) {
+        // RENDERIZAÇÃO DA GRADE DE PRODUTOS
+        function renderProducts() {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = items.map(p => `
-                <div class="product-card p-6 flex flex-col">
-                    <div class="w-full h-48 bg-gray-50 rounded-2xl mb-6 flex items-center justify-center group overflow-hidden relative">
-                        <i data-lucide="${p.img}" class="w-12 h-12 text-[#D4AF37]/30 transition-transform group-hover:scale-125"></i>
-                        <div class="absolute top-3 right-3">
-                            <button class="bg-white/80 backdrop-blur p-2 rounded-full shadow-sm text-gray-400 hover:text-[#D4AF37] transition">
-                                <i data-lucide="heart" class="w-4 h-4"></i>
-                            </button>
+            const filtered = State.products.filter(p => {
+                const matchesFilter = State.currentFilter === 'all' || p.cat === State.currentFilter;
+                const matchesSearch = p.name.toLowerCase().includes(State.searchQuery.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card p-6 flex flex-col justify-between min-h-[360px]">
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] bg-[#D4AF37]/5 px-3 py-1 rounded-full">${p.cat}</span>
+                            <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-[#001F3F]/20">
+                                <i data-lucide="${p.icon}"></i>
+                            </div>
                         </div>
+                        <h3 class="font-bold text-[#001F3F] text-lg leading-tight mb-2">${p.name}</h3>
+                        <p class="text-xs text-gray-400 font-medium mb-4">${p.dose}</p>
                     </div>
-                    <p class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-1">${p.cat}</p>
-                    <h3 class="font-bold text-[#001F3F] mb-1">${p.name}</h3>
-                    <p class="text-xs text-gray-400 mb-4">${p.dose}</p>
-                    <div class="mt-auto flex justify-between items-center">
-                        <span class="font-bold text-[#001F3F]">R$ ${p.price.toFixed(2)}</span>
-                        <button onclick="addToCart(${p.id})" class="bg-gray-100 text-[#001F3F] p-3 rounded-xl hover:bg-[#D4AF37] hover:text-white transition">
-                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    <div class="pt-6 border-t border-gray-50 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] text-gray-300 font-bold uppercase">Investimento</p>
+                            <p class="text-lg font-bold text-[#001F3F]">R$ ${p.price},00</p>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="bg-[#001F3F] text-white p-3.5 rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-md shadow-navy/10">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </div>
             `).join('');
-            lucide.createIcons();
+
+            document.getElementById('product-results-count').innerText = `Encontrados: ${filtered.length} compostos`;
+            lucide.createIcons(); // Vital para os ícones aparecerem após re-renderizar
         }
 
-        // CART LOGIC
+        // LÓGICA DO CARRINHO
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            updateCart();
+            const product = State.products.find(p => p.id === id);
+            const existing = State.cart.find(item => item.id === id);
+
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                State.cart.push({ ...product, qty: 1 });
+            }
             
-            // Feedback visual no botão do nav
-            const btn = document.getElementById('cart-btn-nav');
-            btn.classList.add('cart-animate');
-            setTimeout(() => btn.classList.remove('cart-animate'), 300);
+            updateCartUI();
+            openCart();
         }
 
-        function updateCart() {
-            const container = document.getElementById('cart-items');
-            const count = document.getElementById('cart-count');
-            const total = document.getElementById('cart-total');
-            const emptyMsg = document.getElementById('empty-msg');
+        function changeQty(id, delta) {
+            const item = State.cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    State.cart = State.cart.filter(i => i.id !== id);
+                }
+                updateCartUI();
+            }
+        }
 
-            count.innerText = cart.length;
-            
-            if(cart.length > 0) {
-                emptyMsg.classList.add('hidden');
-                container.innerHTML = cart.map((item, idx) => `
-                    <div class="flex items-center gap-4 bg-white p-3 rounded-xl border border-gray-100">
-                        <div class="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
-                            <i data-lucide="${item.img}" class="w-5 h-5 text-[#D4AF37]"></i>
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            const countEl = document.getElementById('cart-count');
+
+            if (State.cart.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 text-gray-300">
+                        <i data-lucide="package-open" class="w-12 h-12 mb-4 opacity-20"></i>
+                        <p class="text-xs font-bold uppercase tracking-widest">Protocolo Vazio</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = State.cart.map(item => `
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-[#D4AF37]">
+                            <i data-lucide="${item.icon}" class="w-5 h-5"></i>
                         </div>
                         <div class="flex-1">
-                            <h4 class="text-xs font-bold text-[#001F3F]">${item.name}</h4>
-                            <p class="text-[10px] text-gray-400">R$ ${item.price.toFixed(2)}</p>
+                            <h4 class="text-xs font-bold text-[#001F3F] leading-tight">${item.name}</h4>
+                            <p class="text-[10px] text-[#D4AF37] font-bold mt-1">R$ ${item.price},00</p>
                         </div>
-                        <button onclick="removeFromCart(${idx})" class="text-gray-300 hover:text-red-500 transition">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
+                        <div class="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-xl">
+                            <button onclick="changeQty(${item.id}, -1)" class="text-gray-400 hover:text-red-500 transition"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                            <span class="text-xs font-bold text-[#001F3F] min-w-[12px] text-center">${item.qty}</span>
+                            <button onclick="changeQty(${item.id}, 1)" class="text-gray-400 hover:text-navy transition"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                        </div>
                     </div>
                 `).join('');
-            } else {
-                emptyMsg.classList.remove('hidden');
-                container.innerHTML = '';
             }
 
-            const totalPrice = cart.reduce((acc, curr) => acc + curr.price, 0);
-            total.innerText = `R$ ${totalPrice.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            const total = State.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            totalEl.innerText = `R$ ${total.toLocaleString()},00`;
+            countEl.innerText = State.cart.reduce((sum, item) => sum + item.qty, 0);
+            
             lucide.createIcons();
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
+        // CONTROLES DE UI
         function toggleCart() {
-            document.getElementById('drawer').classList.toggle('open');
-            document.getElementById('cart-overlay').classList.toggle('hidden');
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = drawer.classList.contains('drawer-open');
+
+            if (isOpen) {
+                drawer.classList.remove('drawer-open');
+                overlay.classList.add('hidden');
+                overlay.style.opacity = "0";
+            } else {
+                drawer.classList.add('drawer-open');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.style.opacity = "1", 10);
+            }
         }
 
-        function filterShop(cat) {
-            const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
-            renderShop(filtered);
+        function openCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            drawer.classList.add('drawer-open');
+            overlay.classList.remove('hidden');
+            overlay.style.opacity = "1";
         }
 
-        function checkout() {
-            if(cart.length === 0) return alert("Seu carrinho está vazio.");
-            const total = cart.reduce((acc, curr) => acc + curr.price, 0);
-            const msg = encodeURIComponent(`Olá Zyntra. Gostaria de finalizar meu pedido.\nItens: ${cart.map(i => i.name).join(', ')}\nTotal: R$ ${total.toFixed(2)}`);
-            window.open(`https://wa.me/5511999999999?text=${msg}`);
+        function filterBy(cat) {
+            State.currentFilter = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter', 'bg-[#001F3F]', 'text-white'));
+            document.getElementById(`filter-${cat}`).classList.add('active-filter');
+            renderProducts();
         }
 
-        // INIT
+        function handleSearch(val) {
+            State.searchQuery = val;
+            renderProducts();
+        }
+
+        function scrollToShop() {
+            document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function sendOrder() {
+            if (State.cart.length === 0) return alert("Seu protocolo está vazio.");
+            
+            const total = State.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const itemsList = State.cart.map(i => `• ${i.name} (x${i.qty})`).join('%0A');
+            const message = `Olá, gostaria de solicitar meu protocolo Zyntra:%0A%0A${itemsList}%0A%0ATotal: R$ ${total.toLocaleString()},00%0A%0A*Solicito atendimento para envio prioritário.*`;
+            
+            window.open(`https://wa.me/5511999999999?text=${message}`, '_blank');
+        }
+
+        // INICIALIZAÇÃO
         window.onload = () => {
-            renderShop();
-            lucide.createIcons();
+            renderProducts();
+            updateCartUI();
         };
     </script>
 </body>
