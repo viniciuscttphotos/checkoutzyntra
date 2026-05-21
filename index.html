@@ -3,255 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZYNTRA | Performance System</title>
+    <title>ZYNTRA | Intelligence System</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --navy: #001F3F;
-            --gold: #D4AF37;
-            --gold-light: #F4DF4E;
-            --ice: #FBFBFE;
-        }
+        :root { --navy: #001F3F; --gold: #D4AF37; --ice: #FBFBFE; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--ice); color: #1D1D1F; }
+        
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Estética Glassmorphism */
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
+        
+        /* Glow de Recomendação IA */
+        .recommendation-glow { box-shadow: 0 0 25px rgba(212, 175, 55, 0.3); border: 1px solid var(--gold) !important; position: relative; }
+        .recommendation-glow::before { content: "RECOMENDADO PARA SEU PERFIL"; position: absolute; top: -12px; left: 20px; background: var(--gold); color: white; font-size: 8px; padding: 2px 10px; font-weight: 900; border-radius: 4px; letter-spacing: 1px; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--ice);
-            color: #1D1D1F;
-            overflow-x: hidden;
-        }
+        /* Animações */
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- Estética Premium --- */
-        .glass {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
+        .btn-premium { position: relative; overflow: hidden; transition: all 0.3s ease; }
+        .btn-premium::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: 0.5s; }
+        .btn-premium:hover::after { left: 100%; }
 
-        .gold-gradient {
-            background: linear-gradient(135deg, #D4AF37 0%, #C5A028 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .premium-card {
-            background: white;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .premium-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.04);
-            border-color: var(--gold);
-        }
-
-        /* --- Splash --- */
-        #splash {
-            position: fixed; inset: 0; z-index: 1000;
-            background: white;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: all 0.8s ease;
-        }
-        #splash.exit { opacity: 0; visibility: hidden; transform: scale(1.1); }
-
-        .particle {
-            position: absolute; width: 3px; height: 3px;
-            background: var(--gold); border-radius: 50%;
-            animation: fly linear infinite;
-        }
-        @keyframes fly {
-            from { transform: translateY(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            to { transform: translateY(-100vh); opacity: 0; }
-        }
-
-        /* --- Drawer & Modals --- */
-        #drawer {
-            transform: translateX(100%);
-            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        #drawer.open { transform: translateX(0); }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        #drawer { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <!-- SPLASH SCREEN -->
-    <div id="splash">
-        <div id="particles-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
-        <div class="relative z-10 text-center animate-pulse">
-            <div class="w-20 h-20 bg-[#001F3F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
-                <div class="w-8 h-8 border-4 border-[#D4AF37] rotate-45"></div>
+    <!-- HEADER MINIMALISTA -->
+    <nav class="glass fixed top-0 w-full z-50 border-b border-gray-100 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-8">
+            <h1 class="font-bold tracking-[0.3em] text-xl text-[#001F3F]">ZYNTRA</h1>
+            <div class="hidden lg:flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                <a href="#compostos" class="hover:text-[#D4AF37] transition">Biomoléculas</a>
+                <a href="#protocolos" class="hover:text-[#D4AF37] transition">Stacks</a>
+                <a href="#ciencia" class="hover:text-[#D4AF37] transition">Laboratório</a>
             </div>
-            <h1 class="text-3xl font-bold tracking-[0.3em] text-[#001F3F] mb-2">ZYNTRA</h1>
-            <p class="text-[10px] uppercase tracking-[0.5em] text-[#D4AF37]">Performance System</p>
-            <button onclick="enterSystem()" class="mt-12 px-10 py-4 border border-[#D4AF37] text-[#C5A028] text-xs font-bold uppercase tracking-widest hover:bg-[#D4AF37] hover:text-white transition-all">
-                Iniciar Protocolo
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleScanner()" class="hidden md:flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full border border-gray-100 hover:border-[#D4AF37] transition group">
+                <i data-lucide="scan" class="w-4 h-4 text-[#D4AF37] group-hover:rotate-90 transition"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest">IA Bio-Scan</span>
+            </button>
+            <button onclick="toggleCart()" class="bg-[#001F3F] text-white p-3 rounded-full relative hover:scale-105 transition">
+                <i data-lucide="dna" class="w-5 h-5"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-[#D4AF37] rounded-full text-[10px] flex items-center justify-center font-bold">0</span>
             </button>
         </div>
-    </div>
+    </nav>
 
-    <!-- APP WRAPPER -->
-    <div id="app" class="hidden opacity-0 transition-opacity duration-1000">
-        
-        <!-- HEADER -->
-        <nav class="glass fixed top-0 w-full z-50 border-b border-gray-100 px-6 py-4">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <span class="font-bold tracking-[0.2em] text-xl text-[#001F3F]">ZYNTRA</span>
-                    <span class="hidden md:block h-4 w-[1px] bg-gray-200 mx-2"></span>
-                    <div class="hidden md:flex items-center gap-2 text-[9px] font-bold text-green-500 uppercase">
-                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>
-                        Sistema Seguro Ativo
+    <!-- SCANNER MODAL (NOVIDADE) -->
+    <div id="scanner-ui" class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-[#001F3F]/40 backdrop-blur-md">
+        <div class="bg-white rounded-[40px] p-10 max-w-lg w-full shadow-2xl">
+            <h3 class="text-2xl font-bold text-[#001F3F] mb-2">Protocolo Inteligente</h3>
+            <p class="text-sm text-gray-400 mb-8">Defina seu objetivo biológico para otimização do sistema.</p>
+            <div class="space-y-4">
+                <button onclick="runScan('performance')" class="w-full p-6 border border-gray-100 rounded-2xl flex items-center justify-between hover:border-[#D4AF37] transition group">
+                    <div class="text-left">
+                        <p class="font-bold text-[#001F3F]">Performance & Força</p>
+                        <p class="text-[10px] text-gray-400 uppercase">Foco em explosão e síntese proteica</p>
                     </div>
-                </div>
-
-                <div class="flex items-center gap-6">
-                    <div class="hidden sm:block text-right">
-                        <p class="text-[9px] text-gray-400 uppercase font-bold tracking-widest">Protocolo</p>
-                        <p id="nav-total" class="text-sm font-bold text-[#001F3F]">R$ 0,00</p>
+                    <i data-lucide="zap" class="w-5 h-5 text-gray-200 group-hover:text-[#D4AF37]"></i>
+                </button>
+                <button onclick="runScan('longevity')" class="w-full p-6 border border-gray-100 rounded-2xl flex items-center justify-between hover:border-[#D4AF37] transition group">
+                    <div class="text-left">
+                        <p class="font-bold text-[#001F3F]">Longevidade & Saúde</p>
+                        <p class="text-[10px] text-gray-400 uppercase">Foco em telômeros e reparo celular</p>
                     </div>
-                    <button onclick="toggleCart()" class="relative bg-[#001F3F] p-3 rounded-full text-white shadow-xl hover:scale-110 transition-transform">
-                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-[#D4AF37] border-2 border-white rounded-full text-[10px] flex items-center justify-center font-bold text-[#001F3F]">0</span>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
-            <!-- HERO -->
-            <header class="mb-16">
-                <h2 class="text-[#D4AF37] font-bold tracking-[0.3em] text-[10px] mb-4 uppercase">Bio-Tech Private System</h2>
-                <h1 class="text-5xl md:text-7xl font-light tracking-tight text-[#001F3F] leading-[1.1] mb-8">
-                    Arquitetura da <br>
-                    <span class="italic font-serif gold-gradient font-semibold">Super-Performance.</span>
-                </h1>
-
-                <div class="relative max-w-2xl group">
-                    <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
-                    <input type="text" id="searchInput" oninput="filterProducts()" placeholder="O que você deseja otimizar?" 
-                    class="w-full bg-white border border-gray-100 py-6 pl-14 pr-6 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-[#D4AF37]/5 transition-all text-lg">
-                </div>
-
-                <div class="flex gap-2 mt-6 overflow-x-auto no-scrollbar pb-2">
-                    <button onclick="filterCategory('all')" class="cat-pill px-6 py-2 rounded-full bg-[#001F3F] text-white text-[10px] font-bold uppercase tracking-widest transition-all">Todos</button>
-                    <button onclick="filterCategory('performance')" class="cat-pill px-6 py-2 rounded-full bg-white border border-gray-100 text-[10px] font-bold uppercase tracking-widest hover:border-[#D4AF37] transition-all">Performance</button>
-                    <button onclick="filterCategory('recovery')" class="cat-pill px-6 py-2 rounded-full bg-white border border-gray-100 text-[10px] font-bold uppercase tracking-widest hover:border-[#D4AF37] transition-all">Recuperação</button>
-                    <button onclick="filterCategory('longevity')" class="cat-pill px-6 py-2 rounded-full bg-white border border-gray-100 text-[10px] font-bold uppercase tracking-widest hover:border-[#D4AF37] transition-all">Longevidade</button>
-                </div>
-            </header>
-
-            <!-- TABS -->
-            <div class="flex gap-8 border-b border-gray-100 mb-12">
-                <button onclick="switchTab('compostos')" id="tab-c" class="pb-4 text-xs font-bold uppercase tracking-[0.2em] border-b-2 border-[#001F3F] text-[#001F3F]">Compostos</button>
-                <button onclick="switchTab('protocolos')" id="tab-p" class="pb-4 text-xs font-bold uppercase tracking-[0.2em] border-b-2 border-transparent text-gray-400 hover:text-[#001F3F]">Stacks Prontos</button>
-            </div>
-
-            <!-- GRID -->
-            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Injetado via JS -->
-            </div>
-        </main>
-
-        <!-- CART DRAWER -->
-        <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden"></div>
-        <div id="drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl p-8 flex flex-col">
-            <div class="flex justify-between items-center mb-10">
-                <div>
-                    <h2 class="text-2xl font-bold text-[#001F3F]">Seu Protocolo</h2>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Resumo da Bio-Engenharia</p>
-                </div>
-                <button onclick="toggleCart()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                    <i data-lucide="x" class="w-6 h-6"></i>
+                    <i data-lucide="hourglass" class="w-5 h-5 text-gray-200 group-hover:text-[#D4AF37]"></i>
                 </button>
             </div>
-
-            <div id="cart-items" class="flex-1 overflow-y-auto no-scrollbar space-y-6">
-                <!-- Itens -->
-            </div>
-
-            <div class="mt-8 pt-8 border-t border-gray-100">
-                <div class="flex justify-between mb-4">
-                    <span class="text-gray-400 font-medium">Subtotal</span>
-                    <span id="cart-total" class="font-bold text-[#001F3F]">R$ 0,00</span>
-                </div>
-                <button onclick="openCheckout()" class="w-full bg-[#001F3F] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs hover:bg-black transition-all flex items-center justify-center gap-3">
-                    Finalizar Pedido Seguro <i data-lucide="shield-check" class="w-4 h-4 text-[#D4AF37]"></i>
-                </button>
-            </div>
+            <button onclick="toggleScanner()" class="mt-8 w-full text-xs font-bold text-gray-400 uppercase tracking-widest">Fechar</button>
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL -->
-    <div id="checkout-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-[#001F3F]/90 backdrop-blur-lg">
-        <div class="bg-white rounded-[32px] w-full max-w-2xl p-10 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold text-[#001F3F]">Finalização</h2>
-                <button onclick="closeCheckout()" class="text-gray-400 hover:text-black"> <i data-lucide="x"></i> </button>
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+        <!-- SEÇÃO HERO -->
+        <div class="reveal active mb-20">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white border border-[#D4AF37]/20 rounded-full mb-6">
+                <span class="w-2 h-2 bg-[#D4AF37] rounded-full"></span>
+                <span class="text-[9px] font-bold uppercase tracking-widest text-[#001F3F]">Acesso Nível S</span>
             </div>
-            
-            <div id="checkout-content">
-                <!-- Conteúdo do Checkout de 3 passos aqui -->
+            <h2 class="text-5xl md:text-8xl font-light tracking-tighter text-[#001F3F] mb-6">Sistemas de <br><span class="italic font-serif text-[#D4AF37]">Performance.</span></h2>
+            <p class="text-gray-400 max-w-md text-sm leading-relaxed">Não vendemos suplementos. Projetamos protocolos de bio-engenharia para indivíduos que operam em alta demanda física e cognitiva.</p>
+        </div>
+
+        <!-- GRID DE PRODUTOS -->
+        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Injetado via JS -->
+        </div>
+    </main>
+
+    <!-- DRAWER DO PROTOCOLO (CARRINHO) -->
+    <div id="drawer-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/10 backdrop-blur-sm z-[60] hidden"></div>
+    <div id="drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl flex flex-col translate-x-full">
+        <div class="p-8 border-b border-gray-50 flex justify-between items-center">
+            <h2 class="font-bold text-[#001F3F] tracking-widest uppercase text-xs">Seu Protocolo</h2>
+            <button onclick="toggleCart()"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-6">
+            <!-- Itens do carrinho -->
+        </div>
+        <div class="p-8 bg-gray-50 space-y-4">
+            <div class="flex justify-between text-sm font-bold">
+                <span>Total do Protocolo</span>
+                <span id="cart-total" class="text-[#D4AF37]">R$ 0,00</span>
             </div>
+            <button onclick="finalize()" class="btn-premium w-full bg-[#001F3F] text-white py-5 rounded-2xl font-bold uppercase text-[10px] tracking-[0.2em]">Gerar Orçamento Criptografado</button>
         </div>
     </div>
 
     <script>
-        // DATA
+        // DATA APRIMORADA
         const products = [
-            { id: 1, name: 'CJC-1295 + Ipamorelin', dose: '5mg / 5mg', price: 520, cat: 'performance', desc: 'Liberação pulsátil de GH para hipertrofia e recuperação.', icon: 'activity' },
-            { id: 2, name: 'BPC-157', dose: '5mg', price: 390, cat: 'recovery', desc: 'Regeneração tecidual acelerada e anti-inflamatório sistêmico.', icon: 'shield-plus' },
-            { id: 3, name: 'Cardarine', dose: '20mg / 60 caps', price: 380, cat: 'performance', desc: 'Aumento drástico na oxidação de gordura e endurance.', icon: 'zap' },
-            { id: 4, name: 'Epithalon', dose: '10mg', price: 560, cat: 'longevity', desc: 'Regulador telomérico. O padrão ouro da longevidade.', icon: 'hourglass' }
+            { id: 1, name: 'CJC-1295 + IPA', dose: '10mg Protocol', price: 520, cat: 'performance', science: 'Estimula secreção pulsátil de HGH. Melhora síntese proteica.', moa: 'Agonista GHRH' },
+            { id: 2, name: 'BPC-157 Elite', dose: '5mg Vial', price: 390, cat: 'recovery', science: 'Promove angiogênese e reparo de tecidos moles (tendões/ligamentos).', moa: 'Gástrico Estável' },
+            { id: 3, name: 'TB-500 Pro', dose: '5mg Vial', price: 450, cat: 'recovery', science: 'Regulador de actina para migração celular e reparo sistêmico.', moa: 'Peptídeo de Reparo' },
+            { id: 4, name: 'Cardarine GW', dose: '20mg / caps', price: 380, cat: 'performance', science: 'Otimiza o uso de ácidos graxos. Aumento extremo de endurance.', moa: 'Agonista PPARδ' },
+            { id: 5, name: 'Epithalon', dose: '10mg vial', price: 560, cat: 'longevity', science: 'Regulador da glândula pineal e telomerase. Reseta o relógio biológico.', moa: 'Pineal Bioregulator' }
         ];
 
         let cart = [];
-        let activeTab = 'compostos';
+        let recommendedCat = null;
 
-        // ENGINE
-        function createParticles() {
-            const container = document.getElementById('particles-container');
-            for(let i=0; i<20; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                p.style.animationDelay = Math.random() * 2 + 's';
-                container.appendChild(p);
-            }
-        }
-
-        function enterSystem() {
-            document.getElementById('splash').classList.add('exit');
-            setTimeout(() => {
-                const app = document.getElementById('app');
-                app.classList.remove('hidden');
-                setTimeout(() => app.classList.add('opacity-100'), 50);
-                render();
-            }, 600);
-        }
-
-        function render(items = products) {
-            const grid = document.getElementById('products-grid');
-            grid.innerHTML = items.map(p => `
-                <div class="premium-card rounded-[32px] p-8 flex flex-col justify-between min-h-[380px]">
+        // RENDERIZAÇÃO COM BIO-DATA SHEETS
+        function render() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map((p, index) => `
+                <div class="reveal active premium-card rounded-[32px] p-8 flex flex-col justify-between min-h-[420px] ${recommendedCat === p.cat ? 'recommendation-glow' : ''}" style="transition-delay: ${index * 100}ms">
                     <div>
-                        <div class="flex justify-between mb-6">
-                            <span class="px-3 py-1 bg-gray-50 text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] rounded-full border border-gray-100">${p.cat}</span>
-                            <i data-lucide="${p.icon}" class="w-5 h-5 text-[#001F3F]/20"></i>
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="mono text-[8px] border border-gray-100 px-2 py-1 rounded text-gray-400 font-bold uppercase">${p.moa}</span>
+                            <div class="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="flask-conical" class="w-4 h-4 text-[#D4AF37]"></i>
+                            </div>
                         </div>
                         <h3 class="text-2xl font-bold text-[#001F3F] leading-tight mb-2">${p.name}</h3>
-                        <p class="text-xs text-[#D4AF37] font-bold mb-4">${p.dose}</p>
-                        <p class="text-sm text-gray-400 font-light leading-relaxed">${p.desc}</p>
+                        <p class="text-xs text-[#D4AF37] font-bold mb-6">${p.dose}</p>
+                        
+                        <!-- DATA SHEET -->
+                        <div class="bg-gray-50 rounded-2xl p-4 mb-4">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">Mecanismo Científico</p>
+                            <p class="text-xs leading-relaxed text-gray-600">${p.science}</p>
+                        </div>
                     </div>
-                    <div class="mt-8 flex justify-between items-center">
-                        <span class="text-xl font-bold text-[#001F3F]">R$ ${p.price},00</span>
-                        <button onclick="addToCart(${p.id})" class="bg-[#001F3F] text-white p-4 rounded-2xl hover:scale-110 transition-transform active:scale-95">
+                    
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Investimento</p>
+                            <p class="text-xl font-bold text-[#001F3F]">R$ ${p.price}</p>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="btn-premium bg-[#001F3F] text-white p-4 rounded-2xl">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                         </button>
                     </div>
@@ -260,128 +165,72 @@
             lucide.createIcons();
         }
 
+        // BIO-SCAN LOGIC
+        function toggleScanner() {
+            const ui = document.getElementById('scanner-ui');
+            ui.classList.toggle('hidden');
+            ui.classList.toggle('flex');
+        }
+
+        function runScan(objective) {
+            recommendedCat = objective;
+            toggleScanner();
+            render();
+            window.scrollTo({ top: document.getElementById('product-grid').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // CART LOGIC
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
+            const p = products.find(prod => prod.id === id);
+            cart.push(p);
             updateCart();
-            // Notificação visual simples
-            const btn = event.currentTarget;
-            btn.innerHTML = '<i data-lucide="check" class="w-5 h-5 text-green-400"></i>';
-            lucide.createIcons();
-            setTimeout(() => {
-                btn.innerHTML = '<i data-lucide="plus" class="w-5 h-5"></i>';
-                lucide.createIcons();
-            }, 1000);
+            showFeedback();
         }
 
         function updateCart() {
-            const itemsCont = document.getElementById('cart-items');
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            
             document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('nav-total').innerText = `R$ ${total.toLocaleString()},00`;
+            const container = document.getElementById('cart-items');
+            const total = cart.reduce((acc, curr) => acc + curr.price, 0);
             document.getElementById('cart-total').innerText = `R$ ${total.toLocaleString()},00`;
 
-            itemsCont.innerHTML = cart.map((item, index) => `
-                <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                    <div>
+            container.innerHTML = cart.map((item, idx) => `
+                <div class="flex gap-4 items-center">
+                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center font-bold text-[#D4AF37] text-xs">#0${item.id}</div>
+                    <div class="flex-1">
                         <p class="text-sm font-bold text-[#001F3F]">${item.name}</p>
                         <p class="text-[10px] text-gray-400">${item.dose}</p>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <span class="text-sm font-bold">R$ ${item.price}</span>
-                        <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-500"> <i data-lucide="trash-2" class="w-4 h-4"></i> </button>
-                    </div>
+                    <button onclick="remove(${idx})" class="text-gray-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
+        function remove(idx) {
+            cart.splice(idx, 1);
             updateCart();
         }
 
         function toggleCart() {
-            const drawer = document.getElementById('drawer');
-            const overlay = document.getElementById('cart-overlay');
-            drawer.classList.toggle('open');
-            overlay.classList.toggle('hidden');
-        }
-
-        function filterCategory(cat) {
-            // Atualizar botões UI
-            document.querySelectorAll('.cat-pill').forEach(btn => {
-                btn.classList.remove('bg-[#001F3F]', 'text-white');
-                btn.classList.add('bg-white', 'text-gray-500');
-            });
-            event.currentTarget.classList.add('bg-[#001F3F]', 'text-white');
-
-            const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
-            render(filtered);
-        }
-
-        function switchTab(tab) {
-            activeTab = tab;
-            const tc = document.getElementById('tab-c');
-            const tp = document.getElementById('tab-p');
-            
-            if(tab === 'protocolos') {
-                tp.className = "pb-4 text-xs font-bold uppercase tracking-[0.2em] border-b-2 border-[#001F3F] text-[#001F3F]";
-                tc.className = "pb-4 text-xs font-bold uppercase tracking-[0.2em] border-b-2 border-transparent text-gray-400";
-                render([]); // Aqui você poderia carregar protocolos prontos
-            } else {
-                tc.className = "pb-4 text-xs font-bold uppercase tracking-[0.2em] border-b-2 border-[#001F3F] text-[#001F3F]";
-                tp.className = "pb-4 text-xs font-bold uppercase tracking-[0.2em] border-b-2 border-transparent text-gray-400";
-                render(products);
-            }
-        }
-
-        function openCheckout() {
-            if(cart.length === 0) return alert("Adicione compostos ao seu protocolo.");
-            toggleCart();
-            const modal = document.getElementById('checkout-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            
-            document.getElementById('checkout-content').innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" placeholder="Nome Completo" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#D4AF37]">
-                        <input type="text" placeholder="WhatsApp" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#D4AF37]">
-                    </div>
-                    <input type="text" placeholder="Endereço de Entrega Segura" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#D4AF37]">
-                    
-                    <div class="p-6 border border-dashed border-[#D4AF37] rounded-3xl bg-gray-50">
-                        <p class="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37] mb-4 text-center">Garantia Zyntra</p>
-                        <div class="flex justify-around text-center gap-4">
-                            <div> <i data-lucide="package" class="mx-auto mb-2 text-[#001F3F]"></i> <p class="text-[10px] font-bold">Embalagem<br>Discreta</p> </div>
-                            <div> <i data-lucide="lock" class="mx-auto mb-2 text-[#001F3F]"></i> <p class="text-[10px] font-bold">Dados<br>Criptografados</p> </div>
-                            <div> <i data-lucide="truck" class="mx-auto mb-2 text-[#001F3F]"></i> <p class="text-[10px] font-bold">Rastreio<br>Privado</p> </div>
-                        </div>
-                    </div>
-
-                    <button onclick="finalize()" class="w-full bg-[#D4AF37] text-white py-5 rounded-2xl font-bold uppercase tracking-widest hover:scale-105 transition-all">Solicitar Envio Agora</button>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-
-        function closeCheckout() {
-            const modal = document.getElementById('checkout-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            const d = document.getElementById('drawer');
+            const o = document.getElementById('drawer-overlay');
+            d.classList.toggle('translate-x-full');
+            o.classList.toggle('hidden');
         }
 
         function finalize() {
-            const msg = encodeURIComponent(`Olá Zyntra. Gostaria de solicitar meu protocolo personalizado.\nItens: ${cart.map(i => i.name).join(', ')}`);
-            window.open(`https://wa.me/5511999999999?text=${msg}`);
+            const text = encodeURIComponent(`SOLICITAÇÃO DE PROTOCOLO PRIVADO:\n\nItens: ${cart.map(i => i.name).join(', ')}\nTotal: ${document.getElementById('cart-total').innerText}`);
+            window.open(`https://wa.me/5511999999999?text=${text}`);
         }
 
-        window.onload = () => {
-            createParticles();
-            lucide.createIcons();
-        };
+        function showFeedback() {
+            // Simples animação de "adicionado"
+            const count = document.getElementById('cart-count');
+            count.classList.add('scale-150');
+            setTimeout(() => count.classList.remove('scale-150'), 200);
+        }
+
+        window.onload = render;
     </script>
 </body>
 </html>
